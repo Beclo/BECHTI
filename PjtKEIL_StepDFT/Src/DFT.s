@@ -9,8 +9,6 @@
 
 ;Section RAM (read write):
 	area    maram,data,readwrite
-Index dcd 0		
-Xreel dcw 0
 
 	
 ; ===============================================================================================
@@ -23,33 +21,42 @@ Xreel dcw 0
 ; écrire le code ici		
 
 DFT_ModuleAuCarre proc
-	push{R4-R8}
+	push{R4-R12}
 	
-	ldr R6, =TabCos
-	ldr R2, =Index
-	ldrsh R3,[R2]
-	mov R8,#0
+	ldr R4, =TabCos
+	ldr R5, =TabSin
+	
+	; initialisation Index
+	mov R3,#0
+	mov R6,#0
+	mov R7,#0
 	
 
 For	
 
-	mul R4,R1,R3 ;k*n
-	and R4,0x0000003f ;k*n%64
-	ldrsh R7,[R6,R4,LSL #1] ;cos=TabCos[k*n%64]
+	mul R9,R1,R3 ;k*n
+	and R9,#0x0000003f ;k*n%64
 	
-	ldrsh R5,[R0,R3,LSL #1] ;x(n)=Signal[Index]
+	ldrsh R8,[R0,R3,LSL #1] ;x(n)=Signal[Index]
 	
-	mul R5,R7 ;x(n)*cos
-	add R8,R8,R5 ; somme x(n)*cos
+	ldrsh R10,[R4,R9,LSL #1] ;cos=TabCos[k*n%64]
+	ldrsh R11,[R5,R9,LSL #1] ;sin=TabSin[k*n%64]
+	
+	mul R10,R8 ;x(n)*cos
+	add R6,R6,R10 ; somme x(n)*cos
+	
+	mul R11,R8 ;x(n)*sin
+	add R7,R7,R11 ;somme x(n)*sin
 	
 	add R3,#1
-	strh R3,[R2] ; mise à jour valeur Index
 	cmp R3,#64 ; if Index!=64 loop For again
 	bne For
+		
+	smull R0,R1,R6,R6
+	smlal R0,R1,R7,R7
+	;mov R0,R6 ; retourne résultat dans R0
 	
-	mov R0,R8 ; retourne résultat dans R0
-	
-	pop{R4-R8}
+	pop{R4-R12}
 	bx lr
 	endp
 
