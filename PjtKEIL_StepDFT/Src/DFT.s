@@ -52,9 +52,8 @@ For
 	cmp R3,#64 ; if Index!=64 loop For again
 	bne For
 		
-	smull R0,R1,R6,R6
-	smlal R0,R1,R7,R7
-	;mov R0,R6 ; retourne résultat dans R0
+	smull R1,R0,R6,R6
+	smlal R1,R0,R7,R7
 	
 	pop{R4-R12}
 	bx lr

@@ -20,13 +20,13 @@ CLOCK_Configure();
 	
 
 //============================================================================	
-int resultat;
-resultat=DFT_ModuleAuCarre(&LeSignal[0],1);
+//int resultat;
+//resultat=DFT_ModuleAuCarre(&LeSignal[0],1);
 	
-//int resultat[64];
-//	for(int i=0;i<64;i++){
-//		resultat[i]=DFT_ModuleAuCarre(&LeSignal[0],i);
-//	}
+int resultat[64];
+	for(int i=0;i<64;i++){
+		resultat[i]=DFT_ModuleAuCarre(&LeSignal[0],i);
+	}
 	
 while	(1)
 	{
