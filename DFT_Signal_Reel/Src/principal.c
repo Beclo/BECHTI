@@ -8,12 +8,54 @@ extern short int LeSignal[];
 int resultat[64];
 short int dma_buf[64];
 
+// Tableau des scores
+int scores[4]={0};
+// Tableau de compteurs
+int compteur[4]={0};
+
 void callbacksystick(void){
 	Start_DMA1(64);
 	Wait_On_End_Of_DMA1();
 	Stop_DMA1;
 	for(int i=0;i<64;i++){
 		resultat[i]=DFT_ModuleAuCarre(dma_buf,i);
+	}
+	
+	//Qui a marqué ?
+	// Joueur 1 - 85kHz
+	if (resultat[17]>=0x56a8c){
+		compteur[0]+=1;
+		if(compteur[0]==20){
+			scores[0]+=1;
+			compteur[0]=0;
+		}
+	}
+	
+	// Joueur 2 - 95kHz
+	if (resultat[19]>=0x568c){
+		compteur[1]+=1;
+		if(compteur[1]==20){
+			scores[1]+=1;
+			compteur[1]=0;
+		}
+	}
+	
+	// Joueur 3 - 100kHz
+	if (resultat[20]>=0x56a8c){
+		compteur[2]+=1;
+		if(compteur[2]==20){
+			scores[2]+=1;
+			compteur[2]=0;
+		}
+	}
+	
+	// Joueur 4 - 115khz
+	if (resultat[23]>=0x56a8c){
+		compteur[3]+=1;
+		if(compteur[3]==20){
+			scores[3]+=1;
+			compteur[3]=0;
+		}
 	}
 }
 

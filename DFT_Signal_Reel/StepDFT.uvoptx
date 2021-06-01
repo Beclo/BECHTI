@@ -385,6 +385,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>resultat</ItemText>
         </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>scores</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
