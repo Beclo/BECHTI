@@ -1,6 +1,10 @@
 
 
 #include "DriverJeuLaser.h"
+#include "GestionSon.h"
+
+extern void callbackson(void);
+extern void startson(void);
 
 extern int DFT_ModuleAuCarre(short int* Signal64ech, char k);
 extern short int LeSignal[];
@@ -28,6 +32,7 @@ void callbacksystick(void){
 		if(compteur[0]==20){
 			scores[0]+=1;
 			compteur[0]=0;
+			startson();
 		}
 	}
 	
@@ -37,6 +42,7 @@ void callbacksystick(void){
 		if(compteur[1]==20){
 			scores[1]+=1;
 			compteur[1]=0;
+			startson();
 		}
 	}
 	
@@ -46,6 +52,7 @@ void callbacksystick(void){
 		if(compteur[2]==20){
 			scores[2]+=1;
 			compteur[2]=0;
+			startson();
 		}
 	}
 	
@@ -55,6 +62,7 @@ void callbacksystick(void){
 		if(compteur[3]==20){
 			scores[3]+=1;
 			compteur[3]=0;
+			startson();
 		}
 	}
 }
@@ -80,6 +88,18 @@ Init_TimingADC_ActiveADC_ff(ADC1,72);
 Single_Channel_ADC(ADC1,2);
 Init_Conversion_On_Trig_Timer_ff(ADC1,TIM2_CC2,225);
 Init_ADC1_DMA1(0,dma_buf);
+	
+// configuration de CallbackSon sur Timer 4 en débordement 100ms
+	Timer_1234_Init_ff(TIM4, 6552);
+	Active_IT_Debordement_Timer(TIM4,2,callbackson);
+
+// Activation des interruptions issues du Timer 4
+// Association de la fonction à exécuter lors de l'interruption : timer_callback
+// cette fonction (si écrite en ASM) doit être conforme à l'AAPCS
+	
+//configuration de la PWM Timer 3 canal 3 sur PB.0
+	PWM_Init_ff(TIM3,3,720);
+	GPIO_Configure(GPIOB,0,OUTPUT,ALT_PPULL);
 
 	
 	
